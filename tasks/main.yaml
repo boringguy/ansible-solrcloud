@@ -26,8 +26,7 @@
     - { limit_type: '-', limit_item: 'nproc', value: 65536 }
     - { limit_type: 'soft', limit_item: 'memlock', value: unlimited }
     - { limit_type: 'hard', limit_item: 'memlock', value: unlimited }
-- name: reload settings from all system configuration files
-  shell: sysctl --system
+  notify: Reload systemd
 
 - name: Check if Solr has already been downloaded and unpacked
   stat:
