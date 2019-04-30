@@ -10,9 +10,8 @@
   user:
     name: '{{ solr_user }}'
     group: '{{ solr_group }}'
-    home: /home/solr
     state: present
-    createhome: no
+    createhome: yes
   tags:
     - solr_group
 
