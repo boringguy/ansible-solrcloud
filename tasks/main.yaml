@@ -22,7 +22,7 @@
 
 - name: Download Apache Solr
   get_url:
-    url: "{{solr_mirror}}/{{ solr_version }}/solr-{{ solr_version }}.tar.gz"
+    url: "{{solr_mirror}}/{{ solr_version }}/solr-{{ solr_version }}.tgz"
     dest: /tmp
   when: dir.stat.exists == False
   tags:
