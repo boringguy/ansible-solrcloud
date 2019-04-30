@@ -1,0 +1,138 @@
+---
+- name: Create solr group
+  group:
+    name: '{{ solr_group }}'
+    state: present
+  tags:
+    - solr_user
+
+- name: Create solr user
+  user:
+    name: '{{ solr_user }}'
+    group: '{{ solr_group }}'
+    state: present
+    createhome: no
+  tags:
+    - solr_group
+
+- name: Check if Solr has already been downloaded and unpacked
+  stat:
+    path: '{{ solr_root_dir }}/solr-{{ solr_version }}'
+  register: dir
+
+- name: Download Apache Solr
+  get_url:
+    url: "{{solr_mirror}}/{{ solr_version }}/solr-{{ solr_version }}.tar.gz"
+    dest: /tmp
+  when: dir.stat.exists == False
+  tags:
+    - solr_download
+
+- name: Unpack Apache Solr
+  unarchive:
+    src: /tmp/solr-{{ solr_version }}.tar.gz
+    dest: /tmp
+    copy: no
+    group: '{{ solr_group }}'
+    owner: '{{ solr_user }}'
+  when: dir.stat.exists == False
+  tags:
+    - solr_unpack
+
+- name: Create Solr directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ solr_user }}"
+    group: "{{ solr_group }}"
+  with_items:
+    - "{{ solr_log_dir }}"
+    - "{{ solr_data_dir }}"
+  when: dir.stat.exists == False
+  tags:
+    - solr_dirs
+
+- name: Install Solr from script
+  command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tar.gz -i {{ solr_root_dir }} -d {{ solr_home }} -u solr -s solr -p {{ solr_port }} -n
+  tags:
+    - solr_install 
+
+- name: Check Root Path (znode) in ZooKeeper
+  command: >
+    {{ solr_zookeeper_client_path }}/zkcli.sh
+    -zkhost {{ solr_zookeeper_hosts }}
+    -cmd list /{{ solr_zookeeper_hosts_solr_path }}
+  register: solr_path_check
+  changed_when: false
+
+- name: Create Root Path (znode) in ZooKeeper using zkcli script
+  command: >
+    {{ solr_zookeeper_client_path }}/zkcli.sh
+    -zkhost {{ solr_zookeeper_hosts }}
+    -cmd makepath /{{ solr_zookeeper_hosts_solr_path }}
+  when: '" /{{ solr_zookeeper_hosts_solr_path }} " not in solr_path_check.stdout'
+  register: create_root_path_result
+  failed_when: |
+    create_root_path_result.rc != 0 and
+    "NodeExists" not in create_root_path_result.stderr
+
+- name: Configuring jetty server
+  template:
+    src: jetty.xml.j2
+    dest: "{{ solr_installation_dir }}/server/etc/jetty.xml"
+    force: true
+  notify: Restart Solr service
+
+- name: Configuring jetty server http
+  template:
+    src: jetty-http.xml.j2
+    dest: "{{ solr_installation_dir }}/server/etc/jetty-http.xml"
+    force: true
+  notify: Restart Solr service
+
+- name: Configuring SolrCloud init script
+  template:
+    src: solr.in.sh.j2
+    dest: /etc/default/solr.in.sh
+    force: true
+  notify: Restart Solr service
+
+- name: Configuring SolrCloud properties
+  template:
+    src: solr.xml.j2
+    dest: "{{ solr_data_dir }}/solr.xml"
+    force: true
+  notify: Restart Solr service
+
+- name: Configuring logging
+  template:
+    src: "{{ solr_log_config_file }}.j2"
+    dest: "{{ solr_installation_dir }}/{{ solr_log_config_file }}"
+    force: true
+  notify: Restart Solr service
+
+- name: Start the Solr service
+  systemd:
+    name: solr
+    state: started
+    enabled: yes
+    daemon_reload: true
+  tags:
+    - solr_service
+
+# Cleanup install by deleting downloaded ZooKeeper archive
+- name: Delete Solr tar.gz file
+  file:
+    path: /tmp/solr-{{ solr_version }}.tar.gz
+    state: absent
+  tags:
+    - solr_cleanup
+
+# Set Ansible fact that Solr has completed installation. This is so that this role can be used in
+# other dependent roles. Those roles can check for this fact to determine whether or not this role
+# should be run. Failing to do so will mean that this role is executed even if it has already been run.
+- name: Set fact solr_installed
+  set_fact:
+    solr_installed: true
+  tags:
+    - solr_install_fact

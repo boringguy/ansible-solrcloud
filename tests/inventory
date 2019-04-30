@@ -1,8 +1,12 @@
-zookeeper-1 ansible_host=zookeeper-1 ansible_connection=docker
-zookeeper-2 ansible_host=zookeeper-2 ansible_connection=docker
-zookeeper-3 ansible_host=zookeeper-3 ansible_connection=docker
+server-1 ansible_host=server-1 ansible_connection=docker
+server-2 ansible_host=server-2 ansible_connection=docker
+server-3 ansible_host=server-3 ansible_connection=docker
 
-[zookeeper-nodes]
-zookeeper-1 zookeeper_id=1
-zookeeper-2 zookeeper_id=2
-zookeeper-3 zookeeper_id=3
+[zookeeper]
+server-1 zookeeper_id=1 zookeeper_version=3.4.14
+server-2 zookeeper_id=2 zookeeper_version=3.4.14
+server-3 zookeeper_id=3 zookeeper_version=3.4.14
+
+[solr]
+server-1 
+server-2

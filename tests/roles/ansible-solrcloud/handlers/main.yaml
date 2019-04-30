@@ -1,0 +1,9 @@
+---
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  
+- name: Restart Solr service
+  service:
+    name: solr.service
+    state: restarted
