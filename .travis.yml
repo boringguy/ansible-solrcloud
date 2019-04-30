@@ -84,6 +84,10 @@ script:
     && (echo "Service running - pass" && exit 0)
     || (echo "Service running - fail" && exit 1)
 
+  # Check Solr gcp_healthcheck
+  - >
+    docker exec server-1 /opt/solr/bin/solr healthcheck 2>&1
+
 after_script:
   # Stop and remove the Docker containers
   - docker stop server-1 && docker rm server-1
