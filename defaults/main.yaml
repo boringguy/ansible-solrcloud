@@ -23,7 +23,7 @@ solr_log_file_name: solr.log
 solr_log_slow_queries_file_name: solr_slow_requests.log
 
 # Ports
-solr_host: "{{ hostvars[ansible_nodename]['ansible_' + ansible_default_ipv4.alias]['ipv4']['address'] }}"
+solr_host: "{{ inventory_hostname }}"
 solr_port: 8983
 solr_url: http://{{ solr_host }}:{{ solr_port }}/solr
 
@@ -67,8 +67,7 @@ solr_jetty_http_acceptors: -1
 
 # Zookeeper
 solr_zookeeper_hosts: server-1:2181,server-2:2181,server-3:2181
-solr_zookeeper_hosts_solr_path: solr
-solr_zk_host: "{{ solr_zookeeper_hosts }}/{{ solr_zookeeper_hosts_solr_path }}"
+solr_zk_host: "{{ solr_zookeeper_hosts }}/solr"
 solr_zookeeper_client_path: "{{ solr_install_dir }}/server/scripts/cloud-scripts"
 solr_zookeeper_client_timeout: 15000
 

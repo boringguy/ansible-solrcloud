@@ -61,6 +61,7 @@
   file:
     path: "{{ solr_zookeeper_client_path }}/zkcli.sh"
     mode: 0744
+  
 
 - name: Check Root Path (znode) in ZooKeeper
   command: >
@@ -75,7 +76,7 @@
     {{ solr_zookeeper_client_path }}/zkcli.sh
     -zkhost {{ solr_zookeeper_hosts }}
     -cmd makepath /{{ solr_zookeeper_hosts_solr_path }}
-  when: '" /{{ solr_zookeeper_hosts_solr_path }} " not in solr_path_check.stdout'
+  when: '"/solr" not in solr_path_check.stdout'
   register: create_root_path_result
   failed_when: |
     create_root_path_result.rc != 0 and
