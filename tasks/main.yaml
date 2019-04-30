@@ -79,14 +79,14 @@
 - name: Configuring jetty server
   template:
     src: jetty.xml.j2
-    dest: "{{ solr_installation_dir }}/server/etc/jetty.xml"
+    dest: "{{ solr_install_dir }}/server/etc/jetty.xml"
     force: true
   notify: Restart Solr service
 
 - name: Configuring jetty server http
   template:
     src: jetty-http.xml.j2
-    dest: "{{ solr_installation_dir }}/server/etc/jetty-http.xml"
+    dest: "{{ solr_install_dir }}/server/etc/jetty-http.xml"
     force: true
   notify: Restart Solr service
 
@@ -107,7 +107,7 @@
 - name: Configuring logging
   template:
     src: "{{ solr_log_config_file }}.j2"
-    dest: "{{ solr_installation_dir }}/{{ solr_log_config_file }}"
+    dest: "{{ solr_install_dir }}/{{ solr_log_config_file }}"
     force: true
   notify: Restart Solr service
 
