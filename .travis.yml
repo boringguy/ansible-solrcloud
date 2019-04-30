@@ -86,7 +86,7 @@ script:
 
   # Check Solr gcp_healthcheck
   - >
-    docker exec server-1 /opt/solr/bin/solr healthcheck 2>&1
+    docker exec server-1 /opt/solr/bin/solr healthcheck
 
 after_script:
   # Stop and remove the Docker containers
