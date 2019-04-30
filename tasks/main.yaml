@@ -30,7 +30,7 @@
 
 - name: Unpack Apache Solr
   unarchive:
-    src: /tmp/solr-{{ solr_version }}.tar.gz
+    src: /tmp/solr-{{ solr_version }}.tgz
     dest: /tmp
     copy: no
     group: '{{ solr_group }}'
@@ -53,7 +53,7 @@
     - solr_dirs
 
 - name: Install Solr from script
-  command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tar.gz -i {{ solr_root_dir }} -d {{ solr_home }} -u solr -s solr -p {{ solr_port }} -n
+  command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tgz -i {{ solr_root_dir }} -d {{ solr_home }} -u solr -s solr -p {{ solr_port }} -n
   tags:
     - solr_install 
 
