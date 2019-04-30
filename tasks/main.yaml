@@ -67,7 +67,7 @@
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
     -zkhost {{ solr_zookeeper_hosts }}
-    -cmd list /{{ solr_zookeeper_hosts_solr_path }}
+    -cmd list /solr
   register: solr_path_check
   changed_when: false
 
@@ -75,7 +75,7 @@
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
     -zkhost {{ solr_zookeeper_hosts }}
-    -cmd makepath /{{ solr_zookeeper_hosts_solr_path }}
+    -cmd makepath /solr
   when: '"/solr" not in solr_path_check.stdout'
   register: create_root_path_result
   failed_when: |
