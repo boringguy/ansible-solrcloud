@@ -23,6 +23,8 @@ install:
   - docker pull centos/systemd
 
 script:
+  # Debug mode 
+  - export ANSIBLE_STRATEGY=debug
 
   # Check syntax of Ansible role
   - ansible-playbook tests/test.yaml -i tests/inventory --syntax-check
