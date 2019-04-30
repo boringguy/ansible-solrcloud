@@ -46,7 +46,7 @@
     with_indexed_items: "{{ groups['zookeeper-nodes'] }}"
 
 # Install Java and ZooKeeper on all nodes.
-- hosts: zookeeper
+- hosts: zookeeper-nodes
 
   tasks:
   - name: Install Java 8 (OpenJDK)
