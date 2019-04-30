@@ -57,6 +57,11 @@
   tags:
     - solr_install 
 
+- name: Give execution permission to zkcli script
+  file:
+    path: "{{ solr_zookeeper_client_path }}/zkcli.sh"
+    mode: 0744
+
 - name: Check Root Path (znode) in ZooKeeper
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
