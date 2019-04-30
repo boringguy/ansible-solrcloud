@@ -80,6 +80,7 @@ script:
   # Check that the Solr service is running
   - docker exec server-1 service solr start 
   - docker exec server-1 systemctl status solr
+  - docker exec server-1 /opt/solr/bin/solr status
   - docker exec server-1 cat /var/log/solr/solr-8983-console.log
   - docker exec server-1 cat /var/log/solr/solr.log
 
