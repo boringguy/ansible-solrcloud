@@ -60,5 +60,11 @@
 # Install Solr
 - hosts: solr
 
+  tasks:
+  - name: Install lsof
+    yum:
+      name: lsof
+      state: latest
+      
   roles:
     - ansible-zookeeper
