@@ -43,6 +43,18 @@ script:
     | awk 'FNR == 3 {print}' | grep "active (running)"
     && (echo "Service running - pass" && exit 0)
     || (echo "Service running - fail" && exit 1)
+  
+  - >
+    docker exec server-2 systemctl status zookeeper 2>&1
+    | awk 'FNR == 3 {print}' | grep "active (running)"
+    && (echo "Service running - pass" && exit 0)
+    || (echo "Service running - fail" && exit 1)
+  
+  - >
+    docker exec server-3 systemctl status zookeeper 2>&1
+    | awk 'FNR == 3 {print}' | grep "active (running)"
+    && (echo "Service running - pass" && exit 0)
+    || (echo "Service running - fail" && exit 1)
 
   # Check that a Znode can be successfully created
   - >
