@@ -147,7 +147,6 @@
   register: solrcloud_check
   changed_when: false
   ignore_errors: true
-  when: service_solrcloud_status is success
 
 # Cleanup install by deleting downloaded ZooKeeper archive
 - name: Delete Solr tar.gz file
