@@ -54,7 +54,7 @@
       name: java-1.8.0-openjdk
       state: latest
 
-  - roles:
+  roles:
       - ansible-zookeeper
 
 # Install Solr
