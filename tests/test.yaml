@@ -61,4 +61,4 @@
 - hosts: solr
 
   roles:
-    - ansible-solrcloud
+    - ansible-zookeeper
