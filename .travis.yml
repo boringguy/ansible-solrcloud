@@ -24,7 +24,6 @@ install:
 
 script:
   # Install dependent roles 
-  - ansible-galaxy install sleighzy.java-8
   - ansible-galaxy install sleighzy.zookeeper
 
   # Check syntax of Ansible role

@@ -47,9 +47,15 @@
 
 # Install Java and ZooKeeper on all nodes.
 - hosts: zookeeper
+
+  tasks:
+  - name: Install Java 8 (OpenJDK)
+    yum:
+      name: java-1.8.0-openjdk
+      state: latest
+
   roles:
-      - sleighzy.java-8
-      - sleighzy.zookeeper
+    - sleighzy.zookeeper
 
 # Install Solr
 - hosts: solr
