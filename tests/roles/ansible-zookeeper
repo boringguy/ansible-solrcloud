@@ -1,1 +1,1 @@
-../../../ansible-zookeeper
+../../roles/ansible-zookeeper
