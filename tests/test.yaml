@@ -48,7 +48,7 @@
 # Install Java and ZooKeeper on all nodes.
 - hosts: zookeeper
   roles:
-      - sleighzy.java
+      - sleighzy.java-8
       - sleighzy.zookeeper
 
 # Install Solr

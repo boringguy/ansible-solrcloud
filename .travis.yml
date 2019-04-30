@@ -23,8 +23,9 @@ install:
   - docker pull centos/systemd
 
 script:
-  # Debug mode 
-  - export ANSIBLE_STRATEGY=debug
+  # Install dependent roles 
+  - ansible-galaxy install sleighzy.java-8
+  - ansible-galaxy install sleighzy.zookeeper
 
   # Check syntax of Ansible role
   - ansible-playbook tests/test.yaml -i tests/inventory --syntax-check
