@@ -79,14 +79,7 @@ script:
 
   # Check that the Solr service is running
   - >
-    docker exec server-1 systemctl status solr 2>&1
-    | awk 'FNR == 3 {print}' | grep "active (running)"
-    && (echo "Service running - pass" && exit 0)
-    || (echo "Service running - fail" && exit 1)
-
-  # Check Solr gcp_healthcheck
-  - >
-    docker exec server-1 /opt/solr/bin/solr healthcheck
+    docker exec server-1 systemctl status solr 
 
 after_script:
   # Stop and remove the Docker containers
