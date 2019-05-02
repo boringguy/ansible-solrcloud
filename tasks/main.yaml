@@ -145,10 +145,6 @@
     force: true
   notify: Restart Solr service
 
-- name: Enable authentication
-  command: >
-    {{ solr_dir }}/bin/solr auth enable -credentials solr:solrRocks -blockUnknown true -z {{ solr_zk_host }}
-
 - name: Start the Solr service
   systemd:
     name: solr
@@ -157,6 +153,10 @@
     daemon_reload: true
   tags:
     - solr_service
+
+- name: Enable authentication
+  command: >
+    {{ solr_dir }}/bin/solr auth enable -credentials solr:solrRocks -blockUnknown true
 
 # Cleanup install by deleting downloaded ZooKeeper archive
 - name: Delete Solr tar.gz file
