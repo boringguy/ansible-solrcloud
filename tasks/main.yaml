@@ -98,6 +98,7 @@
     -cmd list /solr
   register: solr_path_check
   changed_when: false
+  run_once: true
 
 - name: Create Root Path (znode) in ZooKeeper using zkcli script
   command: >
@@ -105,6 +106,7 @@
     -zkhost {{ solr_zookeeper_hosts }}
     -cmd makepath /solr
   when: '"/solr" not in solr_path_check.stdout'
+  run_once: true
   register: create_root_path_result
   failed_when: |
     create_root_path_result.rc != 0 and
@@ -157,7 +159,7 @@
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
     -zkhost {{ solr_zookeeper_hosts }}
-    -cmd pufile /security.json {{ solr_home }}/security.json
+    -cmd putfile /security.json {{ solr_home }}/security.json
   register: solr_path_check
   changed_when: false
 
@@ -179,6 +181,7 @@
     password: '{{ solr_default_auth_pass }}'
     force_basic_auth: True
   register: solr_main_page
+  run_once: true
   until: solr_main_page.status == 200
   retries: 20
   delay: 10
@@ -196,6 +199,7 @@
     body_format: json
     body: '{"set-user": {"{{ solr_auth_user }}": "{{ solr_auth_pass }}"} }'
   notify: Restart Solr service
+  run_once: true
 
 - name: Change default admin user password via API
   uri:
@@ -210,6 +214,7 @@
     body_format: json
     body: '{"set-user": {"solr": "{{ solr_auth_pass }}"} }'
   notify: Restart Solr service
+  run_once: true
 
 # Cleanup install by deleting downloaded ZooKeeper archive
 - name: Delete Solr tar.gz file
