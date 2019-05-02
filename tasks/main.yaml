@@ -153,6 +153,14 @@
     group: '{{ solr_group }}'
     mode: 0640
 
+- name: Upload security.json to ZooKeeper
+  command: >
+    {{ solr_zookeeper_client_path }}/zkcli.sh
+    -zkhost {{ solr_zookeeper_hosts }}
+    -cmd upload {{ solr_home }}/security.json
+  register: solr_path_check
+  changed_when: false
+
 - name: Start the Solr service
   systemd:
     name: solr
