@@ -53,8 +53,12 @@ Data directory                             | `/var/solr/data`
 Systemd service                            | `/usr/lib/systemd/system/solr.service` 
 
 ## Starting and Stopping ZooKeeper services
-* The ZooKeeper service can be started via: `systemctl start solr`
-* The ZooKeeper service can be stopped via: `systemctl stop solr`
+* The ZooKeeper service can be started via: `systemctl start zookeeper`
+* The ZooKeeper service can be stopped via: `systemctl stop zookeeper`
+
+## Starting and Stopping Solr services
+* The Solr service can be started via: `systemctl start solr`
+* The Solr service can be stopped via: `systemctl stop solr`
 
 ## Dependencies
 
