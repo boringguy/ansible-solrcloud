@@ -6,6 +6,7 @@ solr_group: solr
 solr_user: solr
 
 # Authentication
+solr_auth_type: basic
 solr_auth_configure: True
 solr_auth_user: sunrise
 solr_auth_pass: yYWmPj9fVDGq5aft
