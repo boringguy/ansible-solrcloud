@@ -147,7 +147,7 @@
 
 - name: Enable authentication
   command: >
-    {{ solr_dir }}/bin/solr auth enable -credentials solr:solrRocks -blockUnknown true
+    {{ solr_dir }}/bin/solr auth enable -credentials solr:solrRocks -blockUnknown true -z {{ solr_zk_host }}
 
 - name: Start the Solr service
   systemd:
