@@ -20,14 +20,14 @@ The Zookeeper role from Ansible Galaxy can be used if one is needed.
 
 ## Role Variables
 
-    solr_version: 7.5.0
-    solr_auth_user: sunrise
-    solr_auth_pass: yYWmPj9fVDGq5aft
-    solr_port: 8983
-    solr_zookeeper_hosts: server-1:2181,server-2:2181,server-3:2181
-    solr_zookeeper_client_timeout: 15000
+    solr_version - Solr version
+    solr_auth_user - Solr admin user
+    solr_auth_pass - Solr admin password
+    solr_port - Solr port
+    solr_zookeeper_hosts - Zookeeper connection string (e.g. server-1:2181,server-2:2181,server-3:2181)
+    solr_zookeeper_client_timeout - Zookeeper client timeout
 
-    solr_servers: "{{groups['solr']}}"
+    solr_servers: "{{groups['solr']}}" - Group of solr servers
 
 
 ### Default Ports
@@ -62,29 +62,30 @@ Zookeeper
 
 ## Example Playbook
 
-    - hosts: zookeeper-nodes
+- hosts: zookeeper-nodes
 
-    tasks:
-    - name: Install Java 8 (OpenJDK)
-        yum:
-        name: java-1.8.0-openjdk
-        state: latest
+  tasks:
+  - name: Install Java 8 (OpenJDK)
+    yum:
+      name: java-1.8.0-openjdk
+      state: latest
 
-    roles:
-        - sleighzy.zookeeper
+  roles:
+    - sleighzy.zookeeper
 
-    - hosts: solr-nodes
+# Install Solr
+- hosts: solr-nodes
 
-    tasks:
-    - name: Install lsof
-        yum:
-        name: lsof
-        state: latest
-    
-    - name: Install Java 8 (OpenJDK)
-        yum:
-        name: java-1.8.0-openjdk
-        state: latest
+  tasks:
+  - name: Install Java 8 (OpenJDK)
+    yum:
+      name: java-1.8.0-openjdk
+      state: latest
+      
+  - name: Install lsof
+    yum:
+      name: lsof
+      state: latest
 
-    roles:
-        - ansible-solrcloud
+  roles:
+    - ansible-solrcloud
