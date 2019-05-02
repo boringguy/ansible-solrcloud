@@ -5,6 +5,12 @@ solr_version: 7.5.0
 solr_group: solr
 solr_user: solr
 
+solr_auth_user: sunrise
+solr_auth_pass: server123
+solr_default_auth_user: solr
+solr_default_auth_pass: SolrRocks
+solr_authentication_opts: '-Dbasicauth={{ solr_auth_user }}:{{ solr_auth_pass }}'
+
 solr_root_dir: /opt
 solr_install_dir: '{{ solr_root_dir }}/solr-{{ solr_version }}'
 # The solr_dir is created as a symlik to the actual installation directory.

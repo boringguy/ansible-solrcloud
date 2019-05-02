@@ -82,7 +82,8 @@ script:
   - docker exec server-1 /opt/solr/bin/solr status
   - docker exec server-1 cat /var/log/solr/solr-8983-console.log
   - docker exec server-1 cat /var/log/solr/solr.log
-  - docker exec server-3 curl 
+  - docker exec server-1 curl --user sunrise:server123 http://localhost:8983/solr/ 
+  - docker exec server-1 cat /etc/default/solr.in.sh
 
 after_script:
   # Stop and remove the Docker containers
