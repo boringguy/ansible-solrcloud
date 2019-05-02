@@ -91,7 +91,6 @@
     path: "{{ solr_zookeeper_client_path }}/zkcli.sh"
     mode: 0744
   
-
 - name: Check Root Path (znode) in ZooKeeper
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
@@ -145,7 +144,11 @@
     dest: "{{ solr_install_dir }}/{{ solr_log_config_file }}"
     force: true
   notify: Restart Solr service
-  
+
+- name: Enable authentication
+  command: >
+    {{ solr_dir }}/bin/solr auth enable -credentials solr:solrRocks -blockUnknown true
+
 - name: Start the Solr service
   systemd:
     name: solr
