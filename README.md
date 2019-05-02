@@ -1,4 +1,4 @@
-# Apache ZooKeeper
+# Apache Solr (SolrCloud)
 
 [![Build Status](https://travis-ci.org/boringguy/ansible-solrcloud.svg?branch=master)](https://travis-ci.org/boringguy/ansible-solrcloud)
 
