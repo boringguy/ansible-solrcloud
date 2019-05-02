@@ -157,7 +157,7 @@
   command: >
     {{ solr_zookeeper_client_path }}/zkcli.sh
     -zkhost {{ solr_zookeeper_hosts }}
-    -cmd upload {{ solr_home }}/security.json
+    -cmd pufile /security.json {{ solr_home }}/security.json
   register: solr_path_check
   changed_when: false
 
