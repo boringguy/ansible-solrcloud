@@ -1,41 +1,33 @@
 # Apache ZooKeeper
 
-[![Build Status](https://travis-ci.org/sleighzy/ansible-zookeeper.svg?branch=master)](https://travis-ci.org/sleighzy/ansible-zookeeper)
+[![Build Status](https://travis-ci.org/boringguy/ansible-solrcloud.svg?branch=master)](https://travis-ci.org/boringguy/ansible-solrcloud)
 
-Ansible role for installing and configuring Apache ZooKeeper on RHEL / CentOS 7.
+Ansible role for installing and configuring Apache SolrCloud on RHEL / CentOS 7.
 
-This role can be used to install and cluster multiple ZooKeeper nodes, this uses all hosts defined for the "zookeeper-nodes" group
-in the inventory file by default. All servers are added to the zoo.cfg file along with the leader and election ports.
+This role can be used to install and cluster multiple Solr nodes, this uses all hosts defined for the "solr" group
+in the inventory file by default.
 
 ## Requirements
 
 Platform: RHEL / CentOS 7
 
 Java: Java 8
+Zookeeper: 
 
-The Oracle Java 8 JDK role from Ansible Galaxy can be used if one is needed.
+The Zookeeper role from Ansible Galaxy can be used if one is needed.
 
-`$ ansible-galaxy install sleighzy.java-8`
+`$ ansible-galaxy install sleighzy.zookeeper`
 
 ## Role Variables
 
-    zookeeper_version: 3.4.13
-    zookeeper_group: zookeeper
-    zookeeper_user: zookeeper
-    zookeeper_root_dir: /usr/share
-    zookeeper_install_dir: '{{ zookeeper_root_dir}}/zookeeper-{{zookeeper_version}}'
-    zookeeper_dir: '{{ zookeeper_root_dir }}/zookeeper'
-    zookeeper_log_dir: /var/log/zookeeper
-    zookeeper_data_dir: /var/lib/zookeeper
-    zookeeper_data_log_dir: /var/lib/zookeeper
-    zookeeper_client_port: 2181
-    zookeeper_id: 1
-    zookeeper_leader_port: 2888
-    zookeeper_election_port: 3888
-    zookeeper_mirror: "http://www-eu.apache.org/dist/zookeeper"
-    zookeeper_servers: "{{groups['zookeeper-nodes']}}"
-    zookeeper_environment:
-        "JVMFLAGS": "-javaagent:/opt/jolokia/jolokia-jvm-1.6.0-agent.jar"
+    solr_version: 7.5.0
+    solr_auth_user: sunrise
+    solr_auth_pass: yYWmPj9fVDGq5aft
+    solr_port: 8983
+    solr_zookeeper_hosts: server-1:2181,server-2:2181,server-3:2181
+    solr_zookeeper_client_timeout: 15000
+
+    solr_servers: "{{groups['solr']}}"
 
 
 ### Default Ports
@@ -45,35 +37,54 @@ The Oracle Java 8 JDK role from Ansible Galaxy can be used if one is needed.
 | 2181 | Client connection port |
 | 2888 | Quorum port for clustering |
 | 3888 | Leader election port for clustering |
+| 8983 | Solr Web Client |
 
 
 ### Default Directories and Files
 
  Description                               | Directory / File 
 -------------------------------------------|------------------
-Installation directory                     | `/usr/share/zookeeper-<version>`
-Symlink to install directory               | `/usr/share/zookeeper` 
-Symlink to configuration                   | `/etc/zookeeper/zoo.cfg` 
-Log files                                  | `/var/log/zookeeper` 
-Data directory for snapshots and myid file | `/var/lib/zookeeper` 
-Data directory for transaction log files   | `/var/lib/zookeeper` 
-Systemd service                            | `/usr/lib/systemd/system/zookeeper.service` 
-System Defaults                            | `/etc/default/zookeeper` 
+Installation directory                     | `/opt/solr/solr-<version>`
+Symlink to install directory               | `/opt/solr` 
+Configuration                              | `/etc/default/solr.in.sh` 
+Log files                                  | `/var/log/solr` 
+Solr home directory                        | `/var/solr`
+Data directory                             | `/var/solr/data` 
+Systemd service                            | `/usr/lib/systemd/system/solr.service` 
 
 ## Starting and Stopping ZooKeeper services
-* The ZooKeeper service can be started via: `systemctl start zookeeper`
-* The ZooKeeper service can be stopped via: `systemctl stop zookeeper`
+* The ZooKeeper service can be started via: `systemctl start solr`
+* The ZooKeeper service can be stopped via: `systemctl stop solr`
 
 ## Dependencies
 
-No dependencies
+Zookeeper
 
 ## Example Playbook
 
-    - hosts: servers
-      roles:
-         - sleighzy.zookeeper
+    - hosts: zookeeper-nodes
 
-## License
+    tasks:
+    - name: Install Java 8 (OpenJDK)
+        yum:
+        name: java-1.8.0-openjdk
+        state: latest
 
-MIT
+    roles:
+        - sleighzy.zookeeper
+
+    - hosts: solr-nodes
+
+    tasks:
+    - name: Install lsof
+        yum:
+        name: lsof
+        state: latest
+    
+    - name: Install Java 8 (OpenJDK)
+        yum:
+        name: java-1.8.0-openjdk
+        state: latest
+
+    roles:
+        - ansible-solrcloud
