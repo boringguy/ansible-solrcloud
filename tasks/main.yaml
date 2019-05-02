@@ -15,19 +15,6 @@
   tags:
     - solr_group
 
-# - name: Configure system settings, file descriptors and number of threads
-#   pam_limits:
-#     domain: '{{ solr_user }}'
-#     limit_type: '{{ item.limit_type }}'
-#     limit_item: "{{ item.limit_item }}"
-#     value: "{{item.value}}"
-#   with_items:
-#     - { limit_type: '-', limit_item: 'nofile', value: 65536 }
-#     - { limit_type: '-', limit_item: 'nproc', value: 65536 }
-#     - { limit_type: 'soft', limit_item: 'memlock', value: unlimited }
-#     - { limit_type: 'hard', limit_item: 'memlock', value: unlimited }
-#   notify: Reload systemd
-
 - name: Check if Solr has already been downloaded and unpacked
   stat:
     path: '{{ solr_root_dir }}/solr-{{ solr_version }}'
@@ -157,11 +144,7 @@
 
 - name: Upload security.json to ZooKeeper
   command: >
-    {{ solr_zookeeper_client_path }}/zkcli.sh
-    -zkhost {{ solr_zookeeper_hosts }}
-    -cmd putfile /security.json {{ solr_home }}/security.json
-  register: solr_path_check
-  changed_when: false
+    {{ solr_dir }}/bin/solr zk cp file:{{ solr_home }}/security.json zk:/security.json -z {{ solr_zk_host }}
 
 - name: Start the Solr service
   systemd:
