@@ -66,6 +66,7 @@ Zookeeper
 
 ## Example Playbook
 
+```yaml
 - hosts: zookeeper-nodes
 
   tasks:
@@ -93,3 +94,4 @@ Zookeeper
 
   roles:
     - ansible-solrcloud
+    ```
