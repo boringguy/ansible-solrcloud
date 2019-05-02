@@ -148,7 +148,7 @@
 - name: Start the Solr service
   systemd:
     name: solr
-    state: started
+    state: restarted
     enabled: yes
     daemon_reload: true
   tags:
