@@ -159,8 +159,8 @@ SOLR_PORT="{{ solr_port }}"
 # Settings for authentication
 # Please configure only one of SOLR_AUTHENTICATION_CLIENT_BUILDER or SOLR_AUTH_TYPE parameters
 #SOLR_AUTHENTICATION_CLIENT_BUILDER="org.apache.solr.client.solrj.impl.PreemptiveBasicAuthClientBuilderFactory"
-SOLR_AUTH_TYPE="basic"
-SOLR_AUTHENTICATION_OPTS="{{ solr_authentication_opts }}"
+#SOLR_AUTH_TYPE="basic"
+#SOLR_AUTHENTICATION_OPTS=""
 
 # Settings for ZK ACL
 #SOLR_ZK_CREDS_AND_ACLS="-DzkACLProvider=org.apache.solr.common.cloud.VMParamsAllAndReadonlyDigestZkACLProvider \
@@ -179,4 +179,21 @@ SOLR_AUTHENTICATION_OPTS="{{ solr_authentication_opts }}"
 #SOLR_RECOMMENDED_OPEN_FILES=
 #SOLR_RECOMMENDED_MAX_PROCESSES=
 #SOLR_ULIMIT_CHECKS=
+
+{% if solr_auth_configure %}
+SOLR_AUTH_TYPE="{{ solr_auth_type }}"
+SOLR_AUTHENTICATION_OPTS="{{ solr_authentication_opts }}"
+{% endif %}
+
+{% if solr_ssl_configure %}
+SOLR_SSL_KEY_STORE="{{ solr_ssl_key_store }}"
+SOLR_SSL_KEY_STORE_PASSWORD="{{ solr_ssl_key_store_password }}"
+SOLR_SSL_TRUST_STORE="{{ solr_ssl_trust_store }}"
+SOLR_SSL_TRUST_STORE_PASSWORD="{{ solr_ssl_trust_store_password }}"
+SOLR_SSL_NEED_CLIENT_AUTH="{{ solr_ssl_need_client_auth }}"
+SOLR_SSL_WANT_CLIENT_AUTH="{{ solr_ssl_want_client_auth }}"
+SOLR_SSL_KEY_STORE_TYPE="{{ solr_ssl_key_store_type }}"
+SOLR_SSL_TRUST_STORE_TYPE="{{ solr_ssl_trust_store_type }}"
+SOLR_SSL_CHECK_PEER_NAME={{ solr_ssl_check_peer_name }}
+{% endif %}
 
