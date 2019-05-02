@@ -15,18 +15,18 @@
   tags:
     - solr_group
 
-- name: Configure system settings, file descriptors and number of threads
-  pam_limits:
-    domain: '{{ solr_user }}'
-    limit_type: '{{ item.limit_type }}'
-    limit_item: "{{ item.limit_item }}"
-    value: "{{item.value}}"
-  with_items:
-    - { limit_type: '-', limit_item: 'nofile', value: 65536 }
-    - { limit_type: '-', limit_item: 'nproc', value: 65536 }
-    - { limit_type: 'soft', limit_item: 'memlock', value: unlimited }
-    - { limit_type: 'hard', limit_item: 'memlock', value: unlimited }
-  notify: Reload systemd
+# - name: Configure system settings, file descriptors and number of threads
+#   pam_limits:
+#     domain: '{{ solr_user }}'
+#     limit_type: '{{ item.limit_type }}'
+#     limit_item: "{{ item.limit_item }}"
+#     value: "{{item.value}}"
+#   with_items:
+#     - { limit_type: '-', limit_item: 'nofile', value: 65536 }
+#     - { limit_type: '-', limit_item: 'nproc', value: 65536 }
+#     - { limit_type: 'soft', limit_item: 'memlock', value: unlimited }
+#     - { limit_type: 'hard', limit_item: 'memlock', value: unlimited }
+#   notify: Reload systemd
 
 - name: Check if Solr has already been downloaded and unpacked
   stat:
@@ -69,6 +69,22 @@
   command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tgz -i {{ solr_root_dir }} -d {{ solr_home }} -u solr -s solr -p {{ solr_port }} -n
   tags:
     - solr_install 
+
+- name: Copy solr service
+  template:
+    src: "service.j2"
+    dest: "/lib/systemd/system/solr.service"
+    owner: solr
+    mode: 0755
+  notify: Reload systemd
+
+- name: Enable solr service
+  systemd:
+    name: "solr"
+    enabled: yes
+    masked: no
+    daemon_reload: yes
+    state: restarted
 
 - name: Give execution permission to zkcli script
   file:
@@ -129,7 +145,7 @@
     dest: "{{ solr_install_dir }}/{{ solr_log_config_file }}"
     force: true
   notify: Restart Solr service
-
+  
 - name: Start the Solr service
   systemd:
     name: solr
@@ -138,15 +154,6 @@
     daemon_reload: true
   tags:
     - solr_service
-
-- name: Check installed version
-  action: >
-    uri \
-      url="http://localhost:{{ solr_port }}/solr/admin/info/system?wt=xml" \
-      return_content=yes
-  register: solrcloud_check
-  changed_when: false
-  ignore_errors: true
 
 # Cleanup install by deleting downloaded ZooKeeper archive
 - name: Delete Solr tar.gz file

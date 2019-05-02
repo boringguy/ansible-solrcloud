@@ -1,0 +1,26 @@
+[Unit]
+Description=Apache SOLR
+ConditionPathExists={{solr_dir}}
+After=syslog.target network.target remote-fs.target nss-lookup.target systemd-journald-dev-log.socket
+Before=multi-user.target
+Conflicts=shutdown.target
+
+[Service]
+User=solr
+LimitNOFILE=1048576
+LimitNPROC=1048576
+PIDFile=/var/solr/solr-8983.pid
+Environment=SOLR_INCLUDE=/etc/default/solr.in.sh
+Environment=RUNAS=solr
+Environment=SOLR_INSTALL_DIR={{solr_dir}}
+
+Restart=on-failure
+RestartSec=5
+startLimitIntervalSec=60
+
+ExecStart={{solr_dir}}/bin/solr start
+ExecStop={{solr_dir}}/bin/solr stop
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
