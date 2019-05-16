@@ -31,7 +31,7 @@ solr_ssl_check_peer_name: 'true'
 
 # Certificate
 solr_pkey_path: '{{ solr_dir }}/server/etc/{{ inventory_hostname }}_pkey.pem'
-solr_csr_path: '/etc/ssl/private/{{ invetory_hostname }}.csr'
+solr_csr_path: '/etc/ssl/private/{{ inventory_hostname }}.csr'
 solr_cert_path: '{{ solr_dir }}/server/etc/{{ inventory_hostname }}_cert.pem'
 solr_ssl_key_size: 4096
 
