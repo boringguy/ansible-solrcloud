@@ -73,6 +73,7 @@
     yum:
       name: 
         - lsof
+        - python-pip
         - python-setuptools
       state: latest
 
