@@ -151,6 +151,11 @@
 # SSL
 - name: Generate Self Signed OpenSSL certificate
   block:
+    - name: Ensure python OpenSSL dependencies are installed 
+      pip:
+        name: pyOpenSSL
+        state: present
+        
     - name: Generate an OpenSSL private key
       openssl_privatekey:
         path: '{{ solr_pkey_path }}'
