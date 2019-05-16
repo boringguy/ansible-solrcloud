@@ -151,10 +151,6 @@
 # SSL
 - name: Generate Self Signed OpenSSL certificate
   block:
-    - name: SSL private dir
-      file: path=/etc/ssl/private mode=700 state=directory owner=root
-      sudo: yes
-   
     - name: Generate an OpenSSL private key
       openssl_privatekey:
         path: '{{ solr_pkey_path }}'
