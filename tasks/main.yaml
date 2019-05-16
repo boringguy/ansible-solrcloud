@@ -160,7 +160,7 @@
       openssl_csr:
         path: '{{ solr_csr_path }}'
         privatekey_path: '{{ solr_pkey_path }}'
-        common_name: '{{ invetory_hostname }}'
+        common_name: '{{ inventory_hostname }}'
 
     - name: Generate a Self Signed OpenSSL certificate
       openssl_certificate:
