@@ -58,11 +58,12 @@
     yum:
       name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
       state: installed
-      
+
   - name: Install dependencies
     yum:
       name: 
         - lsof
+        - openssl
         - python-pip
         - python-setuptools
       state: latest
