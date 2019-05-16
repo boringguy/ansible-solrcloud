@@ -171,11 +171,21 @@
         csr_path: '{{ solr_csr_path }}'
         provider: selfsigned
     
+    - name: 
+      slurp:
+        src: "{{ solr_cert_path }}"
+      register: solr_cert 
+    
+    - name: 
+      slurp: 
+        src: "{{ solr_pkey_path }}"
+      register: solr_pkey
+    
     - name: Create keystore
       java_keystore:
         name: '{{ inventory_hostname }}'
-        certificate: "{{ lookup('file', solr_cert_path) }}"
-        private_key: "{{ lookup('file', solr_pkey_path) }}"
+        certificate: '{{ solr_cert["content"] | b64decode }}'
+        private_key: '{{ solr_pkey["content"] | b64decode }}'
         password: '{{ solr_ssl_key_store_password }}'
         dest: '{{ solr_ssl_key_store }}'
         owner: '{{ solr_user }}'
