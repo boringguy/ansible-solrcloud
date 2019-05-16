@@ -84,7 +84,7 @@ script:
     && (echo "Service running - pass" && exit 0)
     || (echo "Service running - fail" && exit 1)
   - docker exec server-1 /opt/solr/bin/solr status
-  - docker exec server-1 curl --user sunrise:yYWmPj9fVDGq5aft http://localhost:8983/solr/ 
+  - docker exec server-1 curl -k --user sunrise:yYWmPj9fVDGq5aft https://localhost:8983/solr/ 
 
 after_script:
   # Stop and remove the Docker containers

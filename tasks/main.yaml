@@ -148,6 +148,38 @@
     {{ solr_dir }}/bin/solr zk cp file:{{ solr_home }}/security.json zk:/security.json -z {{ solr_zk_host }}
   run_once: true
 
+# SSL
+- name: Generate Self Signed OpenSSL certificate
+  block:
+    - name: Generate an OpenSSL private key
+      openssl_privatekey:
+        path: '{{ solr_pkey_path }}'
+        size: '{{ solr_ssl_key_size | int }}'
+
+    - name: Generate an OpenSSL CSR
+      openssl_csr:
+        path: '{{ solr_csr_path }}'
+        privatekey_path: '{{ solr_pkey_path }}'
+        common_name: '{{ invetory_hostname }}'
+
+    - name: Generate a Self Signed OpenSSL certificate
+      openssl_certificate:
+        path: '{{ solr_cert_path }}'
+        privatekey_path: '{{ solr_pkey_path }}'
+        csr_path: '{{ solr_csr_path }}'
+        provider: selfsigned
+    
+    - name: Create keystore
+      java_keystore:
+        name: '{{ inventory_hostname }}'
+        certificate: "{{lookup('file', {{ solr_cert_path }}) }}"
+        private_key: "{{lookup('file', {{ solr_pkey_path }}) }}"
+        password: '{{ solr_ssl_key_store_password }}'
+        dest: '{{ solr_ssl_key_store }}'
+        owner: '{{ solr_user }}'
+        group: '{{ solr_group }}'
+        mode: 0644
+
 - name: Start the Solr service
   systemd:
     name: solr

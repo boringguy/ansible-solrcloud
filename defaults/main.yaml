@@ -19,12 +19,8 @@ solr_ssl_configure: True
 solr_ssl_key_store_path: '{{ solr_dir }}/server/solr'
 solr_ssl_key_store: '{{ solr_ssl_key_store_path }}/{{ solr_ssl_key_store_name }}'
 solr_ssl_trust_store: '{{ solr_ssl_key_store_path }}/{{ solr_ssl_key_store_name }}'
-local_cert_file_path: '{{ default_local_cert_file_path }}'
-local_pkey_file_path: '{{ default_local_pkey_file_path }}'
-solr_local_keystore: True
-solr_local_keystore_path: '{{ role_path }}/files/{{ solr_ssl_key_store_name }}'
 solr_ssl_key_store_name: solr-ssl.keystore.jks
-solr_ssl_key_size: 4096
+
 solr_ssl_key_store_password: 123456
 solr_ssl_trust_store_password: 123456
 solr_ssl_need_client_auth: 'false'
@@ -32,13 +28,12 @@ solr_ssl_want_client_auth: 'false'
 solr_ssl_key_store_type: JKS
 solr_ssl_trust_store_type: JKS
 solr_ssl_check_peer_name: 'true'
-# https://docs.ansible.com/ansible/latest/openssl_certificate_module.html
-solr_ssl_certificate_provider: selfsigned
 
 # Certificate
-solr_ca_domain: example.com
-solr_local_pkey_file_name: '{{ invetory_hostname }}.ca-pkey.pem'
-solr_local_cert_file_name: '{{ invetory_hostname }}.ca-cert.pem'
+solr_pkey_path: '{{ solr_dir }}/server/etc/{{ inventory_hostname }}_pkey.pem'
+solr_csr_path: '/etc/ssl/private/{{ invetory_hostname }}.csr'
+solr_cert_path: '{{ solr_dir }}/server/etc/{{ inventory_hostname }}_cert.pem'
+solr_ssl_key_size: 4096
 
 # Directories
 solr_root_dir: /opt
@@ -61,7 +56,7 @@ solr_log_slow_queries_file_name: solr_slow_requests.log
 # Ports
 solr_host: "{{ inventory_hostname }}"
 solr_port: 8983
-solr_url: http://{{ solr_host }}:{{ solr_port }}/solr
+solr_url: https://{{ solr_host }}:{{ solr_port }}/solr
 
 # JVM
 solr_gc_tune: "-XX:NewRatio=3 \

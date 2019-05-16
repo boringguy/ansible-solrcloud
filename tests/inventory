@@ -8,5 +8,5 @@ server-2 zookeeper_id=2 zookeeper_version=3.4.14
 server-3 zookeeper_id=3 zookeeper_version=3.4.14
 
 [solr-nodes]
-server-1 solr_ssl_configure=False
-server-2 solr_ssl_configure=False
+server-1 solr_ssl_configure=True
+server-2 solr_ssl_configure=True
