@@ -180,6 +180,11 @@ SOLR_PORT="{{ solr_port }}"
 #SOLR_RECOMMENDED_MAX_PROCESSES=
 #SOLR_ULIMIT_CHECKS=
 
+{% if solr_auth_configure %}
+SOLR_AUTH_TYPE="{{ solr_auth_type }}"
+SOLR_AUTHENTICATION_OPTS="{{ solr_authentication_opts }}"
+{% endif %}
+
 {% if solr_ssl_configure %}
 SOLR_SSL_KEY_STORE="{{ solr_ssl_key_store }}"
 SOLR_SSL_KEY_STORE_PASSWORD="{{ solr_ssl_key_store_password }}"

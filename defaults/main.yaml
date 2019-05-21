@@ -10,6 +10,7 @@ solr_auth_type: basic
 solr_auth_configure: True
 solr_default_auth_user: solr
 solr_default_auth_password: SolrRocks
+solr_authentication_opts: '-Dbasicauth=admin:{{ admin_password }}'
 
 #SSL
 solr_ssl_configure: True
