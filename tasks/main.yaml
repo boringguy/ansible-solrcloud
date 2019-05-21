@@ -47,13 +47,13 @@
     group: "{{ solr_group }}"
   with_items:
     - "{{ solr_log_dir }}"
-    - "{{ solr_data_dir }}"
+    - "{{ solr_home }}"
   when: dir.stat.exists == False
   tags:
     - solr_dirs
 
 - name: Install Solr from script
-  command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tgz -i {{ solr_root_dir }} -d {{ solr_home }} -u solr -s solr -p {{ solr_port }} -n
+  command: /tmp/solr-{{ solr_version }}/bin/install_solr_service.sh /tmp/solr-{{ solr_version }}.tgz -i {{ solr_root_dir }} -d {{ solr_base_dir }} -u solr -s solr -p {{ solr_port }} -n
   tags:
     - solr_install 
 
@@ -123,7 +123,7 @@
 - name: Configuring SolrCloud properties
   template:
     src: solr.xml.j2
-    dest: "{{ solr_data_dir }}/solr.xml"
+    dest: "{{ solr_home }}/solr.xml"
     force: true
   notify: Restart Solr service
 
@@ -220,37 +220,84 @@
   retries: 20
   delay: 10
 
-- name: Create admin user via API
-  uri:
-    url: '{{solr_url}}/admin/authentication'
-    method: POST
-    user: '{{ solr_default_auth_user }}'
-    password: '{{ solr_default_auth_password }}'
-    validate_certs: False
-    force_basic_auth: True
-    headers:
-      Content-Type: 'application/json'
-    body_format: json
-    body: '{"set-user": {"{{ solr_auth_user }}": "{{ solr_auth_pass }}"} }'
-  notify: Restart Solr service
-  run_once: true
+# Rule-based security model configuration
+- name: Setup security model
+  block:
+    - name: Create new users via API
+      uri:
+        url: '{{solr_url}}/admin/authentication'
+        method: POST
+        user: '{{ solr_auth_default_user }}'
+        password: '{{ solr_auth_default_password }}'
+        validate_certs: False
+        force_basic_auth: True
+        headers:
+          Content-Type: 'application/json'
+        body: |
+          {
+            "set-user":{
+              "admin": "{{admin_password}}",
+              "contributor": "{{contributor_password}}",
+              "ingest": "{{ingest_password}}",
+              "reader": "{{reader_password}}"
+            }
+          }
+        body_format: json        
+      run_once: true
 
-- name: Change default admin user password via API
-  uri:
-    url: '{{solr_url}}/admin/authentication'
-    method: POST
-    user: '{{ solr_default_auth_user }}'
-    password: '{{ solr_default_auth_pass }}'
-    validate_certs: False
-    force_basic_auth: True
-    headers:
-      Content-Type: 'application/json'
-    body_format: json
-    body: '{"set-user": {"solr": "{{ solr_auth_pass }}"} }'
-  notify: Restart Solr service
-  run_once: true
+    - name: Set authorization rules via API
+      uri:
+        url: '{{solr_url}}/admin/authorization'
+        method: POST
+        user: '{{ solr_auth_default_user }}'
+        password: '{{ solr_auth_default_password }}'
+        validate_certs: False
+        force_basic_auth: True
+        headers:
+          Content-Type: 'application/json'
+        body: |
+          {
+            "set-permission": {"name": "security-read", "role": ["admin"] },
+            
+            "set-permission": {"name": "config-read", "role": ["reader", "ingest", "contributor"] },
+            "set-permission": {"name": "config-edit", "role": ["contributor"] },
+            
+            "set-permission": {"name": "collection-admin-read", "role": ["reader", "contributor", "ingest"]},
+            "set-permission": {"name": "collection-admin-edit", "role": ["contributor"]},
+            
+            "set-permission": {"name": "core-admin-read", "role": ["reader", "contributor"]},
+            "set-permission": {"name": "core-admin-edit", "role": ["contributor"]},
+            
+            "set-permission": {"name": "read", "role": ["reader", "ingest", "contributor"]},
+            "set-permission": {"name": "update", "role": "ingest"},
+            
+            "set-permission": {"name": "schema-edit", "role": "ingest"},
+            
+            "set-user-role": {
+              "admin": "admin",
+              "contributor": "contributor",
+              "reader": "reader",
+              "ingest": "ingest"
+            }
+          }
+        body_format: json        
+      run_once: true
 
-# Cleanup install by deleting downloaded ZooKeeper archive
+    - name: Remove Solr default user via API
+      uri:
+        url: '{{solr_url}}/admin/authentication'
+        method: POST
+        user: '{{ solr_auth_default_user }}'
+        password: '{{ solr_auth_default_password }}'
+        validate_certs: False
+        force_basic_auth: True
+        headers:
+          Content-Type: 'application/json'
+        body: '{"delete-user": "solr"}'
+        body_format: json        
+      run_once: true
+
+# Cleanup install by deleting downloaded solaris_zone archive
 - name: Delete Solr tar.gz file
   file:
     path: /tmp/solr-{{ solr_version }}.tar.gz
