@@ -1,4 +1,32 @@
 ---
+# Install Solr dependencies
+- name: Install Solr dependencies
+  block:
+    - name: Install Java 8 (OpenJDK)
+      yum:
+        name: java-1.8.0-openjdk
+        state: latest
+    
+    - name: Add EPEL repository (required for additional Python libraries)
+      yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        state: installed
+
+    - name: Install dependencies
+      yum:
+        name: 
+          - lsof
+          - openssl
+          - python-pip
+          - python-setuptools
+        state: latest
+
+    - name: Ensure python OpenSSL dependencies are installed 
+      pip:
+        name: pyOpenSSL
+        state: present
+
+# Solr Installation
 - name: Create solr group
   group:
     name: '{{ solr_group }}'
