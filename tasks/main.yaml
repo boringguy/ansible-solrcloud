@@ -212,7 +212,7 @@
     status_code: '200'
     validate_certs: False
     user: '{{ solr_default_auth_user }}'
-    password: '{{ solr_default_auth_pass }}'
+    password: '{{ solr_default_auth_password }}'
     force_basic_auth: True
   register: solr_main_page
   run_once: true
