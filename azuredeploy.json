@@ -40,7 +40,7 @@
         "availabilitySetName": "myAvSet",
         "imagePublisher": "RedHat",
         "imageOffer": "RHEL",
-        "imageSku": "7.6"
+        "imageSku": "7-RAW"
     },
     "resources": [
         {
