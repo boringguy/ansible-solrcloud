@@ -259,16 +259,16 @@
           {
             "set-permission": {"name": "security-read", "role": ["admin"] },
             
-            "set-permission": {"name": "config-read", "role": ["reader", "ingest", "contributor"] },
+            "set-permission": {"name": "config-read", "role": ["admin", "reader", "ingest", "contributor"] },
             "set-permission": {"name": "config-edit", "role": ["contributor"] },
             
-            "set-permission": {"name": "collection-admin-read", "role": ["reader", "contributor", "ingest"]},
+            "set-permission": {"name": "collection-admin-read", "role": ["admin", "reader", "contributor", "ingest"]},
             "set-permission": {"name": "collection-admin-edit", "role": ["contributor"]},
             
-            "set-permission": {"name": "core-admin-read", "role": ["reader", "contributor"]},
+            "set-permission": {"name": "core-admin-read", "role": ["admin", "reader", "contributor"]},
             "set-permission": {"name": "core-admin-edit", "role": ["contributor"]},
             
-            "set-permission": {"name": "read", "role": ["reader", "ingest", "contributor"]},
+            "set-permission": {"name": "read", "role": ["admin", "reader", "ingest", "contributor"]},
             "set-permission": {"name": "update", "role": "ingest"},
             
             "set-permission": {"name": "schema-edit", "role": "ingest"},
