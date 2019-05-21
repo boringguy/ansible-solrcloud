@@ -2,11 +2,11 @@ server-1 ansible_host=server-1 ansible_connection=docker
 server-2 ansible_host=server-2 ansible_connection=docker
 server-3 ansible_host=server-3 ansible_connection=docker
 
-[zookeeper]
+[zookeeper-nodes]
 server-1 zookeeper_id=1 zookeeper_version=3.4.14
 server-2 zookeeper_id=2 zookeeper_version=3.4.14
 server-3 zookeeper_id=3 zookeeper_version=3.4.14
 
-[solr]
+[solr-nodes]
 server-1 solr_ssl_configure=True admin_password="changeme" contributor_password="changeme" reader_password="changeme" ingest_password="changeme"
 server-2 solr_ssl_configure=True admin_password="changeme" contributor_password="changeme" reader_password="changeme" ingest_password="changeme"
