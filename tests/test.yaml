@@ -46,7 +46,7 @@
     with_indexed_items: "{{ groups['zookeeper-nodes'] }}"
 
 # Install ZooKeeper dependencies
-- hosts: zookeeper-nodes
+- hosts: zookeeper
 
   tasks:
   - name: Install Java 8 (OpenJDK)
@@ -55,13 +55,13 @@
       state: latest
 
 # Install Zookeeper
-- hosts: zookeeper-nodes
+- hosts: zookeeper
 
   roles:
     - sleighzy.zookeeper
 
 # Install dependencies for Solr
-- hosts: solr-nodes
+- hosts: solr
 
   tasks:
   - name: Install Java 8 (OpenJDK)
@@ -89,7 +89,7 @@
       state: present
 
 # Install Solr
-- hosts: solr-nodes
+- hosts: solr
 
   roles:
     - ansible-solrcloud
