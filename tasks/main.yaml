@@ -225,7 +225,7 @@
     url: '{{solr_url}}/admin/authentication'
     method: POST
     user: '{{ solr_default_auth_user }}'
-    password: '{{ solr_default_auth_pass }}'
+    password: '{{ solr_default_auth_password }}'
     validate_certs: False
     force_basic_auth: True
     headers:

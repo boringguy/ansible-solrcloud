@@ -8,11 +8,8 @@ solr_user: solr
 # Authentication
 solr_auth_type: basic
 solr_auth_configure: True
-solr_auth_user: sunrise
-solr_auth_pass: yYWmPj9fVDGq5aft
 solr_default_auth_user: solr
-solr_default_auth_pass: SolrRocks
-solr_authentication_opts: '-Dbasicauth={{ solr_auth_user }}:{{ solr_auth_pass }}'
+solr_default_auth_password: SolrRocks
 
 #SSL
 solr_ssl_configure: True
