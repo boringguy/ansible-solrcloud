@@ -38,9 +38,9 @@ solr_install_dir: '{{ solr_root_dir }}/solr-{{ solr_version }}'
 # The solr_dir is created as a symlik to the actual installation directory.
 # All other configuration and variables use the symlinked directory.
 solr_dir: '{{ solr_root_dir }}/solr'
-solr_home: /var/solr
+solr_base_dir: /var/solr
+solr_home: /var/solr/data
 solr_log_dir: /var/log/solr
-solr_data_dir: '{{ solr_home }}/data'
 
 # Logs
 solr_log_root_level: WARN

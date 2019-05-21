@@ -85,11 +85,11 @@ SOLR_HOST={{ solr_host }}
 
 # Location where the bin/solr script will save PID files for running instances
 # If not set, the script will create PID files in $SOLR_TIP/bin
-SOLR_PID_DIR="{{ solr_home }}"
+SOLR_PID_DIR="{{ solr_base_dir }}"
 
 # Path to a directory for Solr to store cores and their data. By default, Solr will use server/solr
 # If solr.xml is not stored in ZooKeeper, this directory needs to contain solr.xml
-SOLR_HOME="{{ solr_data_dir }}"
+SOLR_HOME="{{ solr_home }}"
 
 # Path to a directory that Solr will use as root for data folders for each core.
 # If not set, defaults to <instance_dir>/data. Overridable per core through 'dataDir' core property
@@ -179,11 +179,6 @@ SOLR_PORT="{{ solr_port }}"
 #SOLR_RECOMMENDED_OPEN_FILES=
 #SOLR_RECOMMENDED_MAX_PROCESSES=
 #SOLR_ULIMIT_CHECKS=
-
-{% if solr_auth_configure %}
-SOLR_AUTH_TYPE="{{ solr_auth_type }}"
-SOLR_AUTHENTICATION_OPTS="{{ solr_authentication_opts }}"
-{% endif %}
 
 {% if solr_ssl_configure %}
 SOLR_SSL_KEY_STORE="{{ solr_ssl_key_store }}"
