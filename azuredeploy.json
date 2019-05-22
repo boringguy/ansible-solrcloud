@@ -76,6 +76,22 @@
             }
         },
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2018-08-01",
+            "name": "[concat('IPAddress', copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "pIpLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "tags": {
+                "displayName": "[concat('IPAddress', copyIndex())]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[concat('nic', copyindex())]",
             "apiVersion": "2016-03-30",
@@ -85,6 +101,7 @@
                 "count": "[parameters('numberOfInstances')]"
             },
             "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', concat('IPAddress', copyIndex()))]",
                 "[variables('virtualNetworkName')]"
             ],
             "properties": {
@@ -93,6 +110,9 @@
                         "name": "ipconfig1",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('IPAddress', copyIndex()))]"
+                            },
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
                             }
