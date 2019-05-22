@@ -1,0 +1,17 @@
+plugin: azure_rm
+include_vm_resource_groups:
+- solrcloud
+auth_source: auto
+conditional_hosts:
+  all_the_hosts: true
+  zookeeper-nodes: "'Zookeeper' in tags"
+  solr-nodes: "'Solr' in tags"
+
+hostvar_expressions:
+  ansible_host: (public_dns_hostnames + public_ipv4_addresses) | first
+  zookeeper_version: "'3.4.14'"
+  solr_ssl_configure: true
+  admin_password: "'changeme'"
+  contributor_password: "'changeme'"
+  reader_password: "'changeme'"
+  ingest_password: "'changeme'"

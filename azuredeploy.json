@@ -8,10 +8,10 @@
                 "description": "Admin username for VM"
             }
         },
-        "adminPassword": {
-            "type": "securestring",
+        "adminPublicKey": {
+            "type": "string",
             "metadata": {
-                "description": "Admin password for VMs"
+                "description": "Specifies the SSH rsa public key file as a string. Use \"ssh-keygen -t rsa -b 2048\" to generate your SSH key pairs."
             }
         },
         "numberOfInstances": {
@@ -106,6 +106,9 @@
             "name": "[concat('myvm', copyIndex())]",
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
+            "tags": [
+                "[if(less(copyIndex(), 3), 'Zookeeper', 'Solr')]"
+            ],
             "copy": {
                 "name": "virtualMachineLoop",
                 "count": "[parameters('numberOfInstances')]"
@@ -123,7 +126,17 @@
                 "osProfile": {
                     "computerName": "[concat('vm', copyIndex())]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                                    "keyData": "[parameters('adminPublicKey')]"
+                                }
+                            ]
+                        }
+                    }
                 },
                 "storageProfile": {
                     "imageReference": {
