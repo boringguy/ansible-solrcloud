@@ -5,9 +5,6 @@
         "adminUsername": {
             "value": "GEN-UNIQUE"
         },
-        "adminPassword": {
-            "value": "GEN-PASSWORD"
-        },
         "numberOfInstances": {
             "value": 2
         }

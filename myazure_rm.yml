@@ -10,6 +10,7 @@ conditional_hosts:
 hostvar_expressions:
   ansible_host: (public_dns_hostnames + public_ipv4_addresses) | first
   zookeeper_version: "'3.4.14'"
+  zookeeper_id: " in tags"
   solr_ssl_configure: true
   admin_password: "'changeme'"
   contributor_password: "'changeme'"
