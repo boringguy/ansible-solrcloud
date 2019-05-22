@@ -106,9 +106,10 @@
             "name": "[concat('myvm', copyIndex())]",
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
-            "tags": [
-                "[if(less(copyIndex(), 3), 'Zookeeper', 'Solr')]"
-            ],
+            "tags": {
+                "Service": "[if(less(copyIndex(), 3), 'Zookeeper', 'Solr')]",
+                "ID": "[add(copyIndex(), 1)]"
+            },
             "copy": {
                 "name": "virtualMachineLoop",
                 "count": "[parameters('numberOfInstances')]"
