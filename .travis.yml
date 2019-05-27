@@ -27,14 +27,14 @@ script:
   - ansible-galaxy install sleighzy.zookeeper
 
   # Check syntax of Ansible role
-  - ansible-playbook tests/test.yaml -i tests/inventory --syntax-check
+  - ansible-playbook tests/solrcloud.yaml -i tests/inventory --syntax-check
 
   # Run Ansible role
-  - ansible-playbook tests/test.yaml -i tests/inventory --verbose
+  - ansible-playbook tests/solrcloud.yaml -i tests/inventory --verbose
 
   # Run the playbook and role again to ensure that it is idempotent and nothing has changed
   - >
-    ansible-playbook tests/test.yaml -i tests/inventory --verbose
+    ansible-playbook tests/solrcloud.yaml -i tests/inventory --verbose
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
