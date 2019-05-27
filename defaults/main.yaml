@@ -25,7 +25,7 @@ solr_ssl_need_client_auth: 'false'
 solr_ssl_want_client_auth: 'false'
 solr_ssl_key_store_type: JKS
 solr_ssl_trust_store_type: JKS
-solr_ssl_check_peer_name: 'true'
+solr_ssl_check_peer_name: 'false'
 
 # Certificate
 solr_pkey_path: '/etc/ssl/{{ inventory_hostname }}_pkey.pem'
