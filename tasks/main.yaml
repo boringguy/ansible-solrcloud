@@ -199,23 +199,19 @@
         csr_path: '{{ solr_csr_path }}'
         provider: selfsigned
     
-    - name: 
-      slurp:
-        src: "{{ solr_cert_path }}"
-      register: solr_cert 
-    
-    - name: 
-      slurp: 
-        src: "{{ solr_pkey_path }}"
-      register: solr_pkey
-    
-    - name: Create keystore
-      java_keystore:
-        name: '{{ inventory_hostname }}'
-        certificate: '{{ solr_cert["content"] | b64decode }}'
-        private_key: '{{ solr_pkey["content"] | b64decode }}'
-        password: '{{ solr_ssl_key_store_password }}'
-        dest: '{{ solr_ssl_key_store }}'
+    - name: Import certificate
+      java_cert:
+        cert_path: '{{ solr_cert_path }}'
+        cert_alias: '{{ inventory_name }}'
+        keystore_path: '{{ solr_ssl_key_store }}'
+        keystore_pass: '{{ solr_ssl_key_store_password }}'
+        keystore_create: yes
+        keystore_type: '{{ solr_ssl_key_store_type }}'
+        state: present
+
+    - name: Change keystore ownership
+      file:
+        path: '{{ solr_ssl_key_store }}'
         owner: '{{ solr_user }}'
         group: '{{ solr_group }}'
         mode: 0644
