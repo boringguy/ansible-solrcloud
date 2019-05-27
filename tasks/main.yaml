@@ -206,7 +206,6 @@
         keystore_path: '{{ solr_ssl_key_store }}'
         keystore_pass: '{{ solr_ssl_key_store_password }}'
         keystore_create: yes
-        keystore_type: '{{ solr_ssl_key_store_type }}'
         state: present
 
     - name: Change keystore ownership
