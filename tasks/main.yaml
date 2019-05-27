@@ -202,7 +202,7 @@
     - name: Import certificate
       java_cert:
         cert_path: '{{ solr_cert_path }}'
-        cert_alias: '{{ inventory_name }}'
+        cert_alias: '{{ inventory_hostname }}'
         keystore_path: '{{ solr_ssl_key_store }}'
         keystore_pass: '{{ solr_ssl_key_store_password }}'
         keystore_create: yes
