@@ -1,1 +1,1 @@
-Write-Host "Variable1 - $(variable1)"
+Write-Host "Inventory Path - $(InventoryPath)"
