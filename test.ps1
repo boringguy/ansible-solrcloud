@@ -1,1 +1,5 @@
-Write-Host "Inventory Path - $(InventoryPath)"
+param(
+  $Data
+)
+
+Write-Host "Inventory Path - $(Data.InventoryPath)"
